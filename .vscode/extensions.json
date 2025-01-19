@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "redhat.vscode-yaml",
+      "Arjun.swagger-viewer",
+      "ms-python.isort",
+      "ms-python.autopep8"
+    ]
+  }
