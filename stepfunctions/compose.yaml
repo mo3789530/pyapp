@@ -1,0 +1,10 @@
+services:
+  stepfunctions-local:
+    image: amazon/aws-stepfunctions-local:latest
+    container_name: stepfunctions-local
+    ports:
+      - "8083:8083"
+    environment:
+      - AWS_ACCESS_KEY_ID=DUMMY
+      - AWS_SECRET_ACCESS_KEY=DUMMY
+      - AWS_DEFAULT_REGION=us-east-1
