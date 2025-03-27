@@ -1,8 +1,9 @@
+from functools import lru_cache
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import health, login
-
+from app.core.config import Settings, get_secret
+from app.routers import health, setting
 
 app = FastAPI()
 
@@ -19,4 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 app.include_router(router=health.router)
+app.include_router(router=setting.router)

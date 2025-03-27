@@ -4,10 +4,10 @@ run-dev:
 	uv run fastapi dev
 
 run-e2e-test:
-	pytest tests/e2e
+	uv run pytest tests/e2e
 
 run-test:
-	pytest tests/service
+	uv run pytest  tests/service
 
 build:
 	uv build
