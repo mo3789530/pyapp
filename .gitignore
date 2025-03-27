@@ -1,0 +1,5 @@
+*.pyc
+*/__pycache__/*
+backend/app/routers/__pycache__/login.cpython-312.pyc
+backend/app/routers/__pycache__/health.cpython-312.pyc
+backend/tests/e2e/__pycache__/__init__.cpython-312.pyc
