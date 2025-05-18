@@ -12,7 +12,7 @@ class UsersBase(SQLModel):
 class Users(UsersBase, table=True):
     __tablename__ = "users"
 
-    id: UUID = Field(default=uuid4, primary_key=True, unique=True)
+    id: UUID = Field(default_factory=uuid4, primary_key=True, unique=True)
 
     created_at: datetime = Field(default_factory=datetime.now, nullable=False)
     deleted_at: datetime | None = Field(default=None, nullable=True)

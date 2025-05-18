@@ -2,12 +2,13 @@ import Table from "../../components/table";
 import { ColumnDef } from "@tanstack/react-table";
 
 // データ型
-type User = {
+export type User = {
     id: number;
     name: string;
     age: number;
     email: string;
 };
+ 
 
 // ダミーデータ
 const userData: User[] = [
@@ -53,9 +54,6 @@ const columns: ColumnDef<User>[] = [
 ];
 
 const TablePage = () => {
-    const [data, count. loading] = useMockAPI('/api/users', {
-        sort: {filed, order}
-    })
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">User Table</h1>

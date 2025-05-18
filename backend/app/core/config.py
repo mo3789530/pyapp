@@ -57,10 +57,6 @@ class Settings(BaseSettings):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        # Ensure the path is absolute or relative to a known location if needed
-        # For example, to place it in the project root:
-        # from pathlib import Path
-        # return f"sqlite:///{Path(__file__).parent.parent.parent / self.SQLITE_DB_FILE}"
         return f"sqlite:///{self.SQLITE_DB_FILE}"
 
     SMTP_TLS: bool = True
@@ -81,7 +77,4 @@ class Settings(BaseSettings):
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
 
 
-
- 
-
-settings = Settings()  # type: ignore
+settings = Settings()
