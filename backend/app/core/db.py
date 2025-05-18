@@ -1,33 +1,76 @@
+from sqlalchemy import Engine
 from sqlmodel import Session, create_engine, select
 
-from app import crud
-from app.core.config import settings
-from app.models import User, UserCreate
-
-engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+from sqlmodel import Session, select
+from core.config import settings # Use the global settings instance
 
 
-# make sure all SQLModel models are imported (app.models) before initializing DB
-# otherwise, SQLModel might fail to initialize relationships properly
-# for more details: https://github.com/fastapi/full-stack-fastapi-template/issues/28
+def init_db(db: Engine) -> None:
+    session = Session(db)
 
+    if settings.ENVIRONMENT != "local": # Corrected: ENVIRONMENT should be all caps
+        print("Skipping seeding, not in local environment.")
+        return
 
-def init_db(session: Session) -> None:
-    # Tables should be created with Alembic migrations
-    # But if you don't want to use migrations, create
-    # the tables un-commenting the next lines
-    # from sqlmodel import SQLModel
+    print("Starting database seeding for local environment...")
+    from models import users, projects
 
-    # This works because the models are already imported and registered from app.models
-    # SQLModel.metadata.create_all(engine)
+    # Seed ProjectStatus
+    # These are the statuses we want to ensure exist in the database.
+    project_statuses_to_seed = ["new", "in_progress", "closed"]
+    for status_name in project_statuses_to_seed:
+        existing_status = session.exec(
+            select(projects.ProjectStatus).where(projects.ProjectStatus.name == status_name)
+        ).first()
+        if not existing_status:
+            status = projects.ProjectStatus(name=status_name)
+            session.add(status)
+            print(f"Seeding project status: {status_name}")
+        else:
+            print(f"Project status '{status_name}' already exists, skipping.")
 
-    user = session.exec(
-        select(User).where(User.email == settings.FIRST_SUPERUSER)
+    user_data_to_seed = [{
+        "email":"example@example.com",
+        "name":"Example User"
+    }]
+    existing_user = session.exec(
+        select(users.Users).where(users.Users.email == user_data_to_seed["email"])
     ).first()
-    if not user:
-        user_in = UserCreate(
-            email=settings.FIRST_SUPERUSER,
-            password=settings.FIRST_SUPERUSER_PASSWORD,
-            is_superuser=True,
-        )
-        user = crud.create_user(session=session, user_create=user_in)
+
+    if not existing_user:
+        user_to_seed = users.Users(**user_data_to_seed)
+        session.add(user_to_seed)
+        print(f"Seeding user: {user_data_to_seed['email']}")
+    else:
+        print(f"User with email '{user_data_to_seed['email']}' already exists, skipping.")
+    
+    # Seed Projects
+    # Define the project we want to seed.
+    project_data_to_seed = {
+        "name":"Example Project"
+        # The Projects model defaults 'status' to "new".
+        # We're ensuring "new" status is created above.
+    }
+    existing_project = session.exec(
+        select(projects.Projects).where(projects.Projects.name == project_data_to_seed["name"])
+    ).first()
+    if not existing_project:
+        project_to_seed = projects.Projects(name=project_data_to_seed["name"])
+        session.add(project_to_seed)
+        print(f"Seeding project: {project_data_to_seed['name']}")
+    else:
+        print(f"Project with name '{project_data_to_seed['name']}' already exists, skipping.")
+
+    session.commit() # Commit all changes to the database
+    print("Database seeding changes committed successfully.")
+
+
+    
+
+
+
+engine = create_engine(
+    str(settings.SQLALCHEMY_DATABASE_URI), connect_args={"check_same_thread": False}
+)
+
+init_db(engine)
