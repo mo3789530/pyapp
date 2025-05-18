@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from sqlmodel import SQLModel, Field, Sequence, Session, select
 from uuid import UUID, uuid4
 from datetime import datetime
@@ -17,13 +17,13 @@ def create_project(session: Session, project: CreateProject) -> Projects:
     db_project = Projects.model_validate(project)
     session.add(db_project)
     session.commit
-    session.refresh(db_project)
     return db_project
 
 
 def update_project(session: Session, update_project: UpdateProject, id: UUID) -> Optional[Projects]:
     db_project = session.get(Projects, id)
     if not db_project:
+        print("Project not found")
         return None
 
     update_data = update_project.model_dump(exclude_unset=True)
@@ -33,3 +33,11 @@ def update_project(session: Session, update_project: UpdateProject, id: UUID) ->
     session.commit()
     session.refresh(db_project)
     return db_project
+
+
+def get_project_joined_users(session: Session, id: UUID) -> List:
+    db_project = session.get(Projects, id)
+    if not db_project:
+        print("Project not found")
+        return None
+    return db_project.joined_users
