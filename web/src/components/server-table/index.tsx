@@ -47,11 +47,14 @@ export const ServerTable = <T,>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onPaginationChange: (updater) => {
-      const newState =
-        typeof updater === "function"
-          ? updater({ pageIndex, pageSize })
-          : updater;
-      onPageChange(newState.pageIndex);
+      // updater は新しい PaginationState または (prevState: PaginationState) => PaginationState
+      if (typeof updater === 'function') {
+        const newPaginationState = updater(table.getState().pagination);
+        onPageChange(newPaginationState.pageIndex);
+      } else {
+        // updater が PaginationState オブジェクトの場合
+        onPageChange(updater.pageIndex);
+      }
     },
   });
 
