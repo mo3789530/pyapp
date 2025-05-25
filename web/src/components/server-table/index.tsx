@@ -7,7 +7,6 @@ import {
   SortingState,
   flexRender,
 } from "@tanstack/react-table";
-import React from "react";
 
 type ServerTableProps<T> = {
   columns: ColumnDef<T, unknown>[];

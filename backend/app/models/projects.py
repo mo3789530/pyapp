@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 from datetime import datetime
 
 
+from models.projects_account_link import ProjectJoinedAccounts
 from models.project_user_link import ProjectJoinedUsers
 
 
@@ -49,6 +50,9 @@ class Projects(ProjectBase, table=True):
     )
     joined_users: List["Users"] = Relationship(
         back_populates="joined_projects", link_model=ProjectJoinedUsers)
+    
+    joined_accounts: List["Accounts"] = Relationship(
+        back_populates="joined_accounts", link_model=ProjectJoinedAccounts)
 
     create_at: datetime = Field(default_factory=datetime.now, nullable=False)
     update_at: datetime = Field(default_factory=datetime.now, nullable=False)
