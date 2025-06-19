@@ -1,6 +1,5 @@
 import enum
 from typing import List
-from pydantic import ConfigDict
 from sqlmodel import Column, Enum, ForeignKey, Relationship, SQLModel, Field, String
 from uuid import UUID, uuid4
 from datetime import datetime
@@ -50,7 +49,7 @@ class Projects(ProjectBase, table=True):
     )
     joined_users: List["Users"] = Relationship(
         back_populates="joined_projects", link_model=ProjectJoinedUsers)
-    
+
     joined_accounts: List["Accounts"] = Relationship(
         back_populates="joined_accounts", link_model=ProjectJoinedAccounts)
 

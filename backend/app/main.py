@@ -1,5 +1,5 @@
 from fastapi import APIRouter, FastAPI
-from routers import projects, users
+from routers import projects, users, request
 
 
 app = FastAPI()
@@ -7,6 +7,7 @@ app = FastAPI()
 api_router = APIRouter()
 api_router.include_router(projects.router)
 api_router.include_router(users.router)
+api_router.include_router(request.router)
 
 app.include_router(api_router, prefix="/api")
 
