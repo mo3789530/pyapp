@@ -8,6 +8,6 @@ dependencies = [
     "fastapi[standard]>=0.115.12",
     "jwt>=1.4.0",
     "pydantic-settings>=2.9.1",
-    "python-jose>=3.5.0",
+    "pyjwt[crypto]>=2.10.1",
     "sqlmodel>=0.0.24",
 ]
