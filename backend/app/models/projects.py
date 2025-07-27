@@ -5,6 +5,8 @@ from uuid import UUID, uuid4
 from datetime import datetime
 
 
+from models.accounts import Accounts
+from models.sso_user import SSOUsers
 from models.projects_account_link import ProjectJoinedAccounts
 from models.project_user_link import ProjectJoinedUsers
 
@@ -47,7 +49,7 @@ class Projects(ProjectBase, table=True):
                          ForeignKey("projectstatus.name")),
         default=ProjectStatusEnum.new
     )
-    joined_users: List["Users"] = Relationship(
+    joined_users: List["SSOUsers"] = Relationship(
         back_populates="joined_projects", link_model=ProjectJoinedUsers)
 
     joined_accounts: List["Accounts"] = Relationship(

@@ -39,5 +39,5 @@ def get_project_joined_users(session: Session, id: UUID) -> List:
     db_project = session.get(Projects, id)
     if not db_project:
         print("Project not found")
-        return None
+        return []
     return db_project.joined_users

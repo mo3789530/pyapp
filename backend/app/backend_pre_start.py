@@ -78,7 +78,14 @@ def seed(db: Engine) -> None:
 
 def create_db_and_tables(engine):
     print("Creating database and tables...")
-    from models import users, projects
+    from models import users, projects, sso_user, accounts
+    SQLModel.metadata.create_all(engine, tables=[
+        users.Users.__table__,
+        projects.Projects.__table__,
+        projects.ProjectStatus.__table__,
+        sso_user.SSOUsers.__table__,
+        accounts.Accounts.__table__,
+    ])
     SQLModel.metadata.create_all(engine)
 
 

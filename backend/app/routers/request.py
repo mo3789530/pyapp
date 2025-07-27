@@ -1,7 +1,9 @@
 
 
+from functools import partial
 from fastapi import APIRouter, Depends, HTTPException
 
+from core.security import get_current_user
 from models.request import CreateRequest, RequestSSOUserCreate, RequestAdminCreate
 from routers.deps import SessionDep
 from uuid import UUID
@@ -11,7 +13,10 @@ router = APIRouter(prefix="/request", tags=["req"])
 
 
 @router.post("/")
-def create_request(request: CreateRequest, session: SessionDep):
+async def create_request(request: CreateRequest, session: SessionDep,
+                         current_user=Depends(
+                             partial(get_current_user, action="create"))
+                         ):
     print(request.item.model_dump_json())
     match request.item:
         case RequestSSOUserCreate():
